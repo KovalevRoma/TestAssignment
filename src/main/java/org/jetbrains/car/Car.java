@@ -27,7 +27,7 @@ public abstract class Car {
     }
 
     public void driveTo(double destination){
-        double distance = destination-this.location;
+        double distance = Math.abs(destination-this.location);    //  MISTAKE
         this.energy.reduceEnergy(distance*energyUsageRate);
         this.location = destination;
     }
@@ -43,7 +43,7 @@ public abstract class Car {
 
     public double getEnergyValue() {
         return (this.energy.getEnergy());
-    }
+    }    //  MISTAKE
 
     protected class Energy{
         private double energy;
@@ -57,7 +57,7 @@ public abstract class Car {
         }
 
         public double getEnergy() {
-            return energy++;
+            return Math.round(energy*100)/100.0;
         }
 
         public void recharge(){
