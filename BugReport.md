@@ -1,13 +1,15 @@
-# Баг репорт
-1) Проблема с превышением процента энергопотребления верхнего лимита заключается в функции driveTo класса Car, определенного в файле Car.java: в случае, когда пункт назначения находился на прямой левее точки старта, переменная distance принимает отрицательное значение. При движении на отрицательное расстояние функция Car.energy.reduceEnergy отрабатывает корректно и вычитает из счетчика топлива отрицательное число. В итоге имеем ситуацию, где уровень топлива при перемещении машины только увеличивался. Проблема решается, если переменную distance определять как модуль разности между текущим положением и пунктом назначения:
-	
-	~~double distance = destination-this.location;~~
+# Bug Report
 
-    double distance = Math.abs(destination-this.location);
+1) The issue with exceeding the upper limit of energy consumption percentage lies in the `driveTo` function of the `Car` class defined in the `Car.java` file: in cases where the destination is directly to the left of the starting point, the variable `distance` takes a negative value. When moving a negative distance, the `Car.energy.reduceEnergy` function works correctly and subtracts a negative number from the fuel counter. As a result, we end up with a situation where the fuel level increases as the car moves. The problem is solved by defining the `distance` variable as the absolute difference between the current position and the destination:
 
-2) Была допущена ошибка в функции getEnergy() при реализации защищенного класса Energy в файле Car.java: при каждом вызове метода количество энергии увеличивалось. Это некорректное поведение метода, поскольку его основная задача --- возвращение текущего уровня топлива машины без изменений. Проблема решается, если при вызове Car.Energy.getEnergy() функция будет возвращать неизмененное значение переменной energy:
+   ```java
+   // double distance = destination - this.location;
+   double distance = Math.abs(destination - this.location);
+```
 
-	~~public double getEnergy() {return energy++;}~~
-		        
-	public double getEnergy() {return energy;}
+2) There was a mistake in the `getEnergy()` function when implementing the protected Energy class in the `Car.java` file: each time the method was called, the amount of energy increased. This is incorrect behavior for the method since its main task is to return the current fuel level of the car without changes. The issue can be resolved by ensuring that when `Car.Energy.getEnergy()` is called, the function returns the unchanged value of the energy variable:
 
+   ```java
+   	// public double getEnergy() { return energy++; }
+   	public double getEnergy() { return energy; }
+   ```
